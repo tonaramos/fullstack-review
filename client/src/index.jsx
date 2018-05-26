@@ -10,12 +10,40 @@ class App extends React.Component {
     this.state = { 
       repos: []
     }
-
+     this.get = this.get.bind(this);
   }
 
-  search (term) {
-    console.log(`${term} was searched`);
-    // TODO
+  search (term, ) {
+    let termJSON = JSON.stringify({value: term});
+    $.ajax({
+      type: 'POST',
+      url: "http://127.0.0.1:1128/Repos",
+      data: termJSON,
+      contentType: 'application/json',
+      success: function (stuff) {
+        // console.log('reseiving as success from the ajax post rec-->', stuff);
+        let newData = JSON.parse(stuff);
+        console.log('newData->>>>>', newData.content)
+        this.setState({repos:[newData.content]})     ///------------temporarily added shell array
+      }.bind(this),
+      error: function (err){
+        console.error('search POST error',err);
+      }
+    });
+  }
+
+  get () {
+    $.ajax({
+      type: 'GET',
+      url: "http://127.0.0.1:1128/Repos",
+      dataType: 'application/json',
+      success: function (data) {
+        //nothing yet
+      }.bind(this),
+      error: function (err){
+        console.error(' client ajax get error', err);
+      }
+    });
   }
 
   render () {
