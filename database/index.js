@@ -9,24 +9,46 @@ let repoSchema = mongoose.Schema(
  {
     id: Number,
     repos_url: String,
+
     name: String,
     location:String,
-    bio: String,
     followers: Number,
     public_repos: Number,
+    html_url: String
   }
 );
 
 let Repo = mongoose.model('Repo', repoSchema);
 
 let save = (repoObj) => {
-  var temp = new Repo(repoObj);
-  temp.save(function(err,data) {
-   // console.log('from the save db server!!!!!!!!!!!!!!!!!!!',repoObj)
-    if (err)return handleError(err);
-   // console.log('one saved - from db/index.js--------')
-  });
+  
+
+
+  // var temp = new Repo(repoObj);
+  // temp.save(function(err,data) {
+  //   if (err)return handleError(err);
+  // });
 }
+
+
+let add = function (stringifiedArray) {
+//for aevery item, 
+//parse, 
+// create a new object with owner data and and array of repos
+//for each run the save function . 
+let userObj = {};
+let firstRepo = JSON.parse(stringifiedArray);
+console.log(firstRepo);
+
+ //  stringifiedArray.map(function(obj){
+ //    //let = JSON.parse(obj);
+
+
+
+ // })
+}
+
+
 
 let get = function (callback, query) {
 Repo.
@@ -45,4 +67,5 @@ Repo.
 
 module.exports.save = save;
 module.exports.get  = get;
+module.exports.add = add;
 

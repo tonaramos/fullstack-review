@@ -13,6 +13,12 @@ class App extends React.Component {
      this.get = this.get.bind(this);
   }
 
+  addRepoToState(newRepo) {
+    let tempState = this.state;
+    tempState.repos.push(newRepo);
+    this.setState(tempState);
+  }
+
   search (term, ) {
     let termJSON = JSON.stringify({value: term});
     $.ajax({
@@ -21,10 +27,11 @@ class App extends React.Component {
       data: termJSON,
       contentType: 'application/json',
       success: function (stuff) {
-        // console.log('reseiving as success from the ajax post rec-->', stuff);
+         //console.log('reseiving as success from the ajax post rec-======----->', stuff);
         let newData = JSON.parse(stuff);
-        console.log('newData->>>>>', newData.content)
-        this.setState({repos:[newData.content]})     ///------------temporarily added shell array
+        //console.log('newData->>>>>>>>>>>>>>>>', JSON.parse(newData.content));
+        //this.setState({repos:[newData.content]})     ///------------temporarily added shell array
+        this.addRepoToState(JSON.parse(newData.content));
       }.bind(this),
       error: function (err){
         console.error('search POST error',err);
@@ -47,6 +54,7 @@ class App extends React.Component {
   }
 
   render () {
+    console.log('the state.repos from index.js', this.state.repos);
     return (<div>
       <h1>Github Fetcher</h1>
       <RepoList repos={this.state.repos}/>

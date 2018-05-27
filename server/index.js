@@ -16,25 +16,21 @@ app.post('/Repos', function (req, res) {
   // [x]and get the repo information from the github API, then
   console.log('this is the user name-=-=-=>', username);
   
-
-
   githubHelper.getReposByUsername(username, (gitData)=>{
     console.log('from the server post ******the gitData--->',gitData);
     
-    db.save(JSON.parse(gitData));
+    db.add(gitData);
 
-    res.send(JSON.stringify({content:gitData}))
+    res.send()
     
-    
+  });
 
-    });
-
-  // [ ]save the repo information in the database
+  // [x]save the repo information in the database
 //[ ]call the save function on the index.js db file to store the new repo
 //[ ]request the entire data base with the app.get func below
 //[ ]respond with the data received from the get respond
 
-console.log('from server post  req----------------------------------------', req.body);
+//console.log('from server post  req----------------------------------------', req.body);
  // res.send(JSON.stringify({message:'server post send--your git info==>>>', {content:[req.body]}));
 
 });
@@ -44,11 +40,13 @@ app.get('/Repos', function (req, res) {
   // This route should send back the top 25 repos
 //console.log('from the server res.body ->', req.body)
   
- 
- let query = db.get((query)=>{res.send(query)});
-
+  let query = db.get((query)=>{res.send(query)});
 
 });
+
+
+
+
 
 let port = 1128;
 
