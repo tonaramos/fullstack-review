@@ -7,65 +7,83 @@ db.once('open', function() {console.log('mongoose - we\'re connnected')});
 
 let repoSchema = mongoose.Schema(
  {
-    id: Number,
-    repos_url: String,
-
-    name: String,
-    location:String,
-    followers: Number,
-    public_repos: Number,
-    html_url: String
+    login: String,
+    url: String,
+    repoName: String,
+    stargazers_count: Number,
+    watchers: Number,
+    html_url: { type: String, unique: true}
   }
 );
 
 let Repo = mongoose.model('Repo', repoSchema);
 
-let save = (repoObj) => {
+
+
+let save = (repoArr) => {
   
+  let tempArr = JSON.parse(repoArr);
 
+  for (let i = 0; i < tempArr.length; i++ ) {
 
-  // var temp = new Repo(repoObj);
-  // temp.save(function(err,data) {
-  //   if (err)return handleError(err);
-  // });
+    let tempObj = {
+      login: tempArr[i].owner.login,
+      url: tempArr[i].owner.html_url,
+      repoName: tempArr[i].name,
+      stargazers_count: tempArr[i].stargazers_count,
+      watchers: tempArr[i].watchers,
+      html_url: tempArr[i].html_url
+    }
+
+    let tempVar = new Repo(tempObj);
+    tempVar.save(function(err,data) {
+      //if (err)return handleError(err);  <--- not handleling the error case
+    });
+  }
 }
 
+// let add = function (stringifiedArray) {   // <----- not using this function at this time
+//   let userObj = {};
+//   let firstRepo = JSON.parse(stringifiedArray);
+//   console.log('this is a readlable Array with objs ->>>>',stringifiedArray);
+//}
 
-let add = function (stringifiedArray) {
-//for aevery item, 
-//parse, 
-// create a new object with owner data and and array of repos
-//for each run the save function . 
-let userObj = {};
-let firstRepo = JSON.parse(stringifiedArray);
-console.log(firstRepo);
+let get = function (callback, userObj) {
 
- //  stringifiedArray.map(function(obj){
- //    //let = JSON.parse(obj);
+Repo.find(userObj ? {'login': userObj.login, 'repoName': userObj.repoName } : {}, '', 
+  
+  function(err, repoArray) {
+  //console.log('repo.find on get dB returned this HHHHHHH->', repoArray);
+  if (err) console.log('errorFromTheGetDBFunction!!!!', err);
 
+console.log('repoArray from database/index.jsx=================', repoArray)
+callback(repoArray);
 
-
- // })
-}
+})
 
 
 
-let get = function (callback, query) {
-Repo.
-  find({}).
-  limit(25).
-  sort({watchers_count: -1}).
-  select({}).
-  exec((err, data)=>{
-    if (err) {
-      console.error(err);
-    };
-    callback(data);
-    console.log('data from db', data);
-  });
+
+
+
+
+
+
+
+
+
+//from the inside of the for loop in save
+  //this.get((dbObj)=>{
+    
+    // if (dbObj !== this.tempObj){
+    //   tempObj.save(function(err,data) {
+    //     if (err)return handleError(err);
+    //   });
+    // };
+    // },tempObj);
 }
 
 module.exports.save = save;
 module.exports.get  = get;
-module.exports.add = add;
+//module.exports.add = add;
 

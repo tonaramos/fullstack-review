@@ -20,19 +20,20 @@ class App extends React.Component {
   }
 
   search (term, ) {
+    let temp = this;
     let termJSON = JSON.stringify({value: term});
     $.ajax({
       type: 'POST',
-      url: "http://127.0.0.1:1128/Repos",
+      url: "http://127.0.0.1:1128/Repo",
       data: termJSON,
       contentType: 'application/json',
       success: function (stuff) {
-         //console.log('reseiving as success from the ajax post rec-======----->', stuff);
-        let newData = JSON.parse(stuff);
-        //console.log('newData->>>>>>>>>>>>>>>>', JSON.parse(newData.content));
-        //this.setState({repos:[newData.content]})     ///------------temporarily added shell array
-        this.addRepoToState(JSON.parse(newData.content));
-      }.bind(this),
+        //let newData = JSON.parse(stuff);
+        //this.addRepoToState(JSON.parse(newData.content));
+        //console.log('POST success message', this);
+        
+        temp.get()
+      },
       error: function (err){
         console.error('search POST error',err);
       }
@@ -43,10 +44,11 @@ class App extends React.Component {
     $.ajax({
       type: 'GET',
       url: "http://127.0.0.1:1128/Repos",
-      dataType: 'application/json',
-      success: function (data) {
-        //nothing yet
-      }.bind(this),
+      dataType: 'json',
+      success: (data)=>  {
+        console.log('the dat from the get request--->', data);
+        this.setState({repos:data})
+      },
       error: function (err){
         console.error(' client ajax get error', err);
       }

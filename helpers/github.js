@@ -17,15 +17,12 @@ let getReposByUsername = (username, callback) => {
     }
   };
   let callbackFunc = function (error, response, body) {
-    console.log(body)
     if (!error && response.statusCode === 200) {
       let info = JSON.parse(body);
-      console.log(info.stargazers_count + " Stars");
-      console.log(info.forks_count + " Forks")
       callback(body);
     } 
     if (error) {
-      console.log('error', error);
+      console.log('error at callback in helpers/github', error);
     }
   }
 request(options, callbackFunc);
