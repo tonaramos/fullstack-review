@@ -27,14 +27,10 @@ class App extends React.Component {
       url: "http://127.0.0.1:1128/Repo",
       data: termJSON,
       contentType: 'application/json',
-      success: function (stuff) {
-        //let newData = JSON.parse(stuff);
-        //this.addRepoToState(JSON.parse(newData.content));
-        //console.log('POST success message', this);
-        
+      success: (stuff)=>{
         temp.get()
       },
-      error: function (err){
+      error: (err)=>{
         console.error('search POST error',err);
       }
     });
@@ -45,11 +41,10 @@ class App extends React.Component {
       type: 'GET',
       url: "http://127.0.0.1:1128/Repos",
       dataType: 'json',
-      success: (data)=>  {
-        console.log('the dat from the get request--->', data);
+      success: (data)=>{
         this.setState({repos:data})
       },
-      error: function (err){
+      error: (err)=>{
         console.error(' client ajax get error', err);
       }
     });

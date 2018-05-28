@@ -10,29 +10,20 @@ app.use(bodyParser.json());
 
 
 app.post('/Repo', function (req, res) {
-  
   let username = req.body.value;
   githubHelper.getReposByUsername(username, (gitData)=>{
     db.save(gitData);
     res.sendStatus(201);
   });
-
 });
 
-app.get('/Repos', function (req, res) {
-  // This route should send back the top 25 repos
-//console.log('from the server res -..........---->', JSON.stringify({value:'thisisatest'}))
-  
-  let data; 
 
+app.get('/Repos', function (req, res) {
+  let data; 
   db.get((query)=>{
     let data = JSON.stringify(query);
-      console.log('from inside db.get in app.get server.index.js===============>>>',typeof data)
-     // console.log(JSON.stringify(query))
-     res.send(data);
+    res.send(data);
   });
-
-
 });
 
 
